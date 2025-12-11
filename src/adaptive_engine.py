@@ -25,9 +25,34 @@ class AdaptiveEngine:
 
     def update(self, correct, time_taken):
         perf = self.compute_performance(correct, time_taken)
+
+        # Reinforcement-style update
         change = self.lr * (perf - self.target)
         self.score += change
-        self.score = min(max(self.score, 0.0), self.max_score)
+
+        # Clamp score between 0 and max
+        self.score = max(0.0, min(self.score, self.max_score))
+
+        # -----------------------------
+        # Streak-based adjustments
+        # -----------------------------
+        if correct:
+            self.correct_streak += 1
+            self.wrong_streak = 0
+        else:
+            self.wrong_streak += 1
+            self.correct_streak = 0
+
+        # 3 correct answers → level up 1 step
+        if self.correct_streak >= 3:
+            self.score = min(self.score + 1.0, self.max_score)
+            self.correct_streak = 0
+
+        # 2 consecutive wrong → level down 1 step
+        if self.wrong_streak >= 2:
+            self.score = max(self.score - 1.0, 0.0)
+            self.wrong_streak = 0
+
 
     def get_level(self):
         """Map continuous score to discrete level 0–3."""
