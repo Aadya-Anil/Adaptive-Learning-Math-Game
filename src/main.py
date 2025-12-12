@@ -56,7 +56,8 @@ def main():
     print(f"Wrong answers:   {tracker.total_wrong()}")
     print(f"Accuracy: {tracker.accuracy()*100:.1f}%")
     print(f"Average time: {tracker.avg_time():.2f}s")
-    next_level = engine.get_level()
+    if tracker.accuracy() > 0.6:
+    next_level = min(engine.get_level()+1, 3) 
     print(f"Recommended next level: {LEVELS[next_level]}")
     print("\nThanks for playing!")
 
