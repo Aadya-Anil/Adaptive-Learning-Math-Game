@@ -10,7 +10,7 @@ def generate_puzzle(level):
         expr = f"{a} {op} {b}"
         if op == "/": #avoids fraction answers
             dividend = a * b
-            expr= f"{dividend} / a", b
+            expr= f"{dividend} / {a}", b
 
     elif level == 1: # Medium : longer expressions
         a, b, c = random.randint(1, 9), random.randint(1, 9), random.randint(1, 9)
